@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Radionics Frequency App</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+
+        .input-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 20px;
+        }
+
+        .input-container input {
+            margin: 5px;
+            padding: 10px;
+            font-size: 16px;
+        }
+
+        .input-container button {
+            padding: 10px;
+            font-size: 16px;
+            margin-top: 15px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        .input-container button:hover {
+            background-color: #45a049;
+        }
+
+        .output-container {
+            margin-top: 30px;
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .photo-container img {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Radionics Non-invasive Surgery</h1>
+
+    <div class="input-container">
+        <h3>Enter subjects Name and Upload Your Photo</h3>
+        <input type="text" id="user-name" placeholder="Enter Your Name">
+        <input type="file" id="user-photo" accept="image/*">
+        <button onclick="displayUserInfo()">Submit</button>
+    </div>
+
+    <div class="photo-container" id="photo-container"></div>
+    <div id="user-name-display"></div>
+
+    <div class="input-container">
+        <h3>Enter Your Symptoms and Wish For Each Symptom
+        <br>Then type the Frequency Rate for feared diagnosis</h3>
+        <div>
+            <input type="text" id="symptom1" placeholder="Symptom 1">
+            <input type="text" id="wish1" placeholder="Wish 1">
+            <input type="number" id="rate1" placeholder="Rate 1 (Hz)">
+        </div>
+        <div>
+            <input type="text" id="symptom2" placeholder="Symptom 2">
+            <input type="text" id="wish2" placeholder="Wish 2">
+            <input type="number" id="rate2" placeholder="Rate 2 (Hz)">
+        </div>
+        <div>
+            <input type="text" id="symptom3" placeholder="Symptom 3">
+            <input type="text" id="wish3" placeholder="Wish 3">
+            <input type="number" id="rate3" placeholder="Rate 3 (Hz)">
+        </div>
+        <div>
+            <input type="text" id="symptom4" placeholder="Symptom 4">
+            <input type="text" id="wish4" placeholder="Wish 4">
+            <input type="number" id="rate4" placeholder="Rate 4 (Hz)">
+        </div>
+        <div>
+            <input type="text" id="symptom5" placeholder="Symptom 5">
+            <input type="text" id="wish5" placeholder="Wish 5">
+            <input type="number" id="rate5" placeholder="Rate 5 (Hz)">
+        </div>
+        <div>
+            <input type="text" id="symptom6" placeholder="Symptom 6">
+            <input type="text" id="wish6" placeholder="Wish 6">
+            <input type="number" id="rate6" placeholder="Rate 6 (Hz)">
+        </div>
+        <div>
+            <input type="text" id="symptom7" placeholder="Symptom 7">
+            <input type="text" id="wish7" placeholder="Wish 7">
+            <input type="number" id="rate7" placeholder="Rate 7 (Hz)">
+        </div>
+        
+        
+        <p>
+            
+          <b>  Imagine a box called the setretdan with all these frequencies (and your radionics information)  inside it, that we put deep inside a larger frequency, called the Master frequency.</b>
+            
+        </p>
+        
+        
+
+        <!-- Master Frequency range input -->
+        <div>
+            <label for="master-rate-start">Master Frequency Start (Hz):</label>
+            <input type="number" id="master-rate-start" placeholder="Start Frequency (Hz)" value="100">
+        </div>
+        <div>
+            <label for="master-rate-end">Master Frequency End (Hz):</label>
+            <input type="number" id="master-rate-end" placeholder="End Frequency (Hz)" value="1000">
+        </div>
+        
+        
+        
+
+        <!-- Button to load the master frequency data -->
+        <button onclick="loadMasterFrequency()">load Setredan into the Master Frequency</button>
+
+        
+    </div>
+
+    <div class="output-container" id="output-container">
+        <div style="color: red;" id="master-frequency-output"></div>
+        
+        <p>
+            
+            imagine the border circumference of the subjects social space was a conduit housing near the edge between the social space and the public space, called the setretricity band.
+            
+            
+        </p>
+        
+        <!-- Button to send frequency after loading -->
+        <button onclick="sendFrequency()">Send into the setretricity band</button>
+        
+        
+        <div style="color: red;" id="frequency-broadcast-output"></div>
+    </div>
+
+    <script>
+        let masterFrequencyData = {
+            symptoms: [],
+            wishes: [],
+            rates: [],
+            masterRateStart: 100,
+            masterRateEnd: 1000
+        };
+
+        // Function to display user information (name and photo)
+        function displayUserInfo() {
+            const userName = document.getElementById('user-name').value;
+            const userPhoto = document.getElementById('user-photo').files[0];
+            
+            if (userName) {
+                document.getElementById('user-name-display').innerText = `Welcome, ${userName}!`;
+            }
+
+            if (userPhoto) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const photoElement = document.createElement('img');
+                    photoElement.src = e.target.result;
+                    document.getElementById('photo-container').appendChild(photoElement);
+                }
+                reader.readAsDataURL(userPhoto);
+            } else {
+                alert("Please upload a photo.");
+            }
+        }
+
+        // Function to load the master frequency data
+        function loadMasterFrequency() {
+            // Retrieve the symptoms, wishes, and rates from input fields
+            let symptoms = [];
+            let wishes = [];
+            let rates = [];
+            for (let i = 1; i <= 7; i++) {
+                symptoms.push(document.getElementById(`symptom${i}`).value);
+                wishes.push(document.getElementById(`wish${i}`).value);
+                rates.push(document.getElementById(`rate${i}`).value);
+            }
+
+            // Retrieve master frequency range values
+            masterFrequencyData.masterRateStart = parseInt(document.getElementById('master-rate-start').value);
+            masterFrequencyData.masterRateEnd = parseInt(document.getElementById('master-rate-end').value);
+
+            // Store the data in masterFrequencyData object
+            masterFrequencyData.symptoms = symptoms;
+            masterFrequencyData.wishes = wishes;
+            masterFrequencyData.rates = rates;
+
+            // Display the loaded data to the user
+            displayMasterFrequencyOutput(symptoms, wishes, rates);
+        }
+
+        // Function to display the master frequency data
+        function displayMasterFrequencyOutput(symptoms, wishes, rates) {
+            const masterFrequencyOutput = document.getElementById('master-frequency-output');
+            masterFrequencyOutput.innerHTML = `
+                <p>Master Frequency Data Loaded:</p>
+                <p>Symptoms: ${symptoms.join(", ")}</p>
+                <p>Wishes: ${wishes.join(", ")}</p>
+                <p>Rates: ${rates.join(", ")}</p>
+            `;
+        }
+
+        // Function to send frequency after it has been loaded
+        function sendFrequency() {
+            if (masterFrequencyData.wishes.length === 0 || masterFrequencyData.rates.length === 0) {
+                alert("Please load the master frequency data first.");
+                return;
+            }
+
+            // Generate a random frequency within the master range
+            let masterFrequency = Math.random() * (masterFrequencyData.masterRateEnd - masterFrequencyData.masterRateStart) + masterFrequencyData.masterRateStart;
+            console.log(`Master Frequency Generated: ${masterFrequency} Hz`);
+
+            // Output the generated frequency to the user
+            displayFrequencyBroadcastOutput(masterFrequency);
+        }
+
+        // Function to display the frequency broadcast output
+        function displayFrequencyBroadcastOutput(masterFrequency) {
+            const frequencyBroadcastOutput = document.getElementById('frequency-broadcast-output');
+            frequencyBroadcastOutput.innerHTML = `
+                <p>Master Frequency Generated: ${masterFrequency.toFixed(2)} Hz</p>
+                <p>Broadcasting frequencies within the barrier of the social space's edge.</p>
+            `;
+        }
+    </script>
+
+</body>
+</html>
